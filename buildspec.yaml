@@ -1,0 +1,20 @@
+  version: 0.2
+  phases:
+    pre_build:
+      commands:
+        - $(aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/kousenko)
+        - REPOSITORY_URI=public.ecr.aws/kousenko/hello
+#        - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+
+    build:
+      commands:
+        - make all # build arm64 and amd64
+        - for i in amd64 arm64; do docker tag hello:${i} ${REPOSITORY_URI}:${i}; done
+
+    post_build:
+      commands:
+        - for i in amd64 arm64; do docker push ${REPOSITORY_URI}:${i}; done
+#        - printf '{"Version":"1.0","ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+
+#artifacts:
+#    files: imageDetail.json
