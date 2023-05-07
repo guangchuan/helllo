@@ -1,8 +1,13 @@
   version: 0.2
   phases:
+    install:
+      runtime-versions:
+        docker: 19
     pre_build:
       commands:
-        - $(aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/kousenko)
+        - echo Logging in to Amazon ECR Public...
+        - aws --version
+        - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
         - REPOSITORY_URI=public.ecr.aws/kousenko/hello
 #        - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
