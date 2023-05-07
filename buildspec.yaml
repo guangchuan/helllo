@@ -1,14 +1,5 @@
   version: 0.2
   phases:
-    install:
-      runtime-versions:
-        docker: 20
-      commands:
-        - echo Logging in to Amazon ECR Public...
-        - aws --version
-        - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
-        - ./aws/install --bin-dir /root/.pyenv/shims --install-dir /usr/local/aws-cli --update
-        - aws --version
     pre_build:
       commands:
         - aws --version
