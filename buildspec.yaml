@@ -3,13 +3,16 @@
     install:
       runtime-versions:
         docker: 20
-    pre_build:
       commands:
         - echo Logging in to Amazon ECR Public...
         - aws --version
         - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip
         - ./aws/install --bin-dir /root/.pyenv/shims --install-dir /usr/local/aws-cli --update
         - aws --version
+    pre_build:
+      commands:
+        - aws --version
+        - echo docker login
         - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
         - REPOSITORY_URI=public.ecr.aws/kousenko/hello
 #        - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
